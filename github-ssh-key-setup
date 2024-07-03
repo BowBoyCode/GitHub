@@ -1,0 +1,89 @@
+git clone in a private github repo
+
+To clone a private GitHub repository, you need to have the appropriate access permissions. Here are the steps to do this:
+
+### Using HTTPS and Personal Access Token
+
+1. **Generate a Personal Access Token:**
+   - Go to GitHub.
+   - Click on your profile picture in the top right corner and go to **Settings**.
+   - In the left sidebar, click **Developer settings**.
+   - Click **Personal access tokens**.
+   - Click **Generate new token**.
+   - Select the scopes or permissions you'd like to grant this token. For cloning a repo, you usually need the `repo` scope.
+   - Click **Generate token** and copy the token.
+
+2. **Clone the Repository:**
+   - Open a terminal.
+   - Use the following command to clone the repository:
+
+     ```sh
+     git clone https://<your_personal_access_token>@github.com/<username>/<repository>.git
+     ```
+
+   - Example:
+
+     ```sh
+     git clone https://ghp_YourAccessTokenHere@github.com/yourusername/yourrepo.git
+     ```
+
+### Using SSH
+
+1. **Generate SSH Key:**
+   - Open a terminal.
+   - Generate an SSH key if you don't have one:
+
+     ```sh
+     ssh-keygen -t ed25519 -C "your_email@example.com"
+     ```
+
+     If you're using an older system that doesn't support Ed25519 keys, use:
+
+     ```sh
+     ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+     ```
+
+   - Follow the prompts to save the key and set a passphrase.
+
+2. **Add SSH Key to GitHub:**
+   - Copy the SSH key to your clipboard:
+
+     ```sh
+     cat ~/.ssh/id_ed25519.pub
+     ```
+
+     or for RSA:
+
+     ```sh
+     cat ~/.ssh/id_rsa.pub
+     ```
+
+   - Go to GitHub.
+   - Click on your profile picture in the top right corner and go to **Settings**.
+   - In the left sidebar, click **SSH and GPG keys**.
+   - Click **New SSH key**.
+   - Paste your key into the "Key" field and give it a title.
+   - Click **Add SSH key**.
+
+3. **Clone the Repository:**
+   - Use the following command to clone the repository:
+
+     ```sh
+     git clone git@github.com:<username>/<repository>.git
+     ```
+
+   - Example:
+
+     ```sh
+     git clone git@github.com:yourusername/yourrepo.git
+     ```
+
+### Explanation of Commands
+
+- `git clone`: The command used to create a copy of an existing Git repository.
+- `https://<your_personal_access_token>@github.com/<username>/<repository>.git`: The URL format to clone a repository using an HTTPS URL with a personal access token.
+- `ssh-keygen -t ed25519 -C "your_email@example.com"`: Generates a new SSH key pair using the Ed25519 algorithm.
+- `cat ~/.ssh/id_ed25519.pub`: Displays the public SSH key, which you need to add to GitHub.
+- `git@github.com:<username>/<repository>.git`: The URL format to clone a repository using SSH.
+
+Let me know if you need any more details or assistance!
