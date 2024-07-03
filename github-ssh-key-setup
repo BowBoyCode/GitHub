@@ -86,4 +86,335 @@ To clone a private GitHub repository, you need to have the appropriate access pe
 - `cat ~/.ssh/id_ed25519.pub`: Displays the public SSH key, which you need to add to GitHub.
 - `git@github.com:<username>/<repository>.git`: The URL format to clone a repository using SSH.
 
+The "403: Forbidden" error indicates that your access token or credentials do not have the necessary permissions to access the repository. Here are some troubleshooting steps to ensure that you have the correct permissions and that everything is set up properly:
+
+### 1. Verify Token Permissions
+Ensure your personal access token has the necessary permissions:
+- Go to GitHub.
+- Click on your profile picture in the top right corner and go to **Settings**.
+- In the left sidebar, click **Developer settings**.
+- Click **Personal access tokens**.
+- Check the token you generated and ensure it has the `repo` scope.
+
+### 2. Ensure Correct Token Usage
+Ensure you are using the correct format for cloning the repository with your personal access token:
+```sh
+git clone https://<your_personal_access_token>@github.com/BowBoyCode/CoDe-Repo.git
+```
+For example:
+```sh
+git clone https://ghp_YourAccessTokenHere@github.com/BowBoyCode/CoDe-Repo.git
+```
+
+### 3. Check Repository Access
+Ensure that the GitHub user associated with the personal access token has the correct access rights to the repository:
+- Navigate to the repository on GitHub.
+- Check if your user has been granted access (e.g., if you are a collaborator or part of a team that has access).
+
+### 4. SSH Method as an Alternative
+If the HTTPS method is causing issues, you can try using SSH instead. Here are the steps:
+
+1. **Ensure SSH Key is Added:**
+   Make sure you've added your SSH key to GitHub as described in the previous instructions.
+
+2. **Use SSH URL to Clone:**
+   Use the SSH URL to clone the repository:
+   ```sh
+   git clone git@github.com:BowBoyCode/CoDe-Repo.git
+   ```
+
+### Example with SSH:
+
+1. **Generate SSH Key (if not already done):**
+   ```sh
+   ssh-keygen -t ed25519 -C "your_email@example.com"
+   ```
+
+2. **Copy SSH Key to GitHub:**
+   ```sh
+   cat ~/.ssh/id_ed25519.pub
+   ```
+   Add this key to GitHub under **Settings > SSH and GPG keys > New SSH key**.
+
+3. **Clone Using SSH:**
+   ```sh
+   git clone git@github.com:BowBoyCode/CoDe-Repo.git
+   ```
+
+If you have confirmed that the token has the necessary permissions, you have access to the repository, and the SSH method doesn't resolve the issue, you might want to regenerate your personal access token and try again.
+
 Let me know if you need any more details or assistance!
+
+Using a private repository requires the correct permissions and credentials. If you've ensured that your personal access token has the correct permissions and added your SSH key to GitHub, but you're still encountering issues, there are a few more things to check:
+
+### 1. Verify Repository Access
+Ensure that the user account associated with your personal access token or SSH key has explicit access to the private repository. You can verify this by:
+
+- Navigating to the repository on GitHub.
+- Going to **Settings** > **Manage access**.
+- Ensuring your user account is listed under **Collaborators** or is part of a team that has access to the repository.
+
+### 2. Regenerate Personal Access Token
+Sometimes regenerating the personal access token and ensuring it has the correct permissions can resolve access issues:
+
+1. Go to GitHub.
+2. Click on your profile picture in the top right corner and go to **Settings**.
+3. In the left sidebar, click **Developer settings**.
+4. Click **Personal access tokens**.
+5. Click **Generate new token**.
+6. Select the `repo` scope.
+7. Click **Generate token** and copy the token.
+
+### 3. Use Correct Cloning Command
+Ensure that you are using the correct format for cloning the repository with your new personal access token:
+
+```sh
+git clone https://<your_new_personal_access_token>@github.com/BowBoyCode/CoDe-Repo.git
+```
+
+For example:
+
+```sh
+git clone https://ghp_yourNewAccessTokenHere@github.com/BowBoyCode/CoDe-Repo.git
+```
+
+### 4. Check SSH Key Setup
+If you're using SSH, ensure the SSH key is correctly configured:
+
+1. **Generate SSH Key (if not already done):**
+   ```sh
+   ssh-keygen -t ed25519 -C "your_email@example.com"
+   ```
+
+2. **Add SSH Key to GitHub:**
+   - Copy the SSH key:
+     ```sh
+     cat ~/.ssh/id_ed25519.pub
+     ```
+   - Add this key to GitHub under **Settings > SSH and GPG keys > New SSH key**.
+
+3. **Test SSH Connection:**
+   Verify that SSH is working correctly:
+   ```sh
+   ssh -T git@github.com
+   ```
+
+   You should see a message like:
+   ```
+   Hi yourusername! You've successfully authenticated, but GitHub does not provide shell access.
+   ```
+
+4. **Clone Using SSH:**
+   ```sh
+   git clone git@github.com:BowBoyCode/CoDe-Repo.git
+   ```
+
+### Additional Debugging Steps
+
+1. **Check Git Configuration:**
+   Ensure that your Git configuration is correct and that you don't have conflicting credentials:
+
+   ```sh
+   git config --list --show-origin
+   ```
+
+2. **Clear Cached Credentials:**
+   If you have previously cached credentials that are causing conflicts, you can clear them:
+
+   ```sh
+   git credential-cache exit
+   ```
+
+3. **Use GitHub CLI:**
+   If you have the GitHub CLI installed, you can try cloning the repository using it:
+
+   ```sh
+   gh repo clone BowBoyCode/CoDe-Repo
+   ```
+
+### Summary
+1. Verify you have access to the private repository.
+2. Regenerate the personal access token with the `repo` scope.
+3. Use the correct cloning command with the new token.
+4. Ensure the SSH key is added to GitHub and correctly configured if using SSH.
+
+If these steps do not resolve the issue, there might be a specific configuration or permission issue with your GitHub account or the repository itself. You can also check GitHub's documentation or contact GitHub support for further assistance.
+
+Generating and using SSH keys is a secure and efficient way to clone and interact with private repositories on GitHub. Here's a step-by-step guide to generate SSH keys and use them for cloning a repository on your Kali Linux terminal:
+
+### Step-by-Step Guide
+
+#### 1. Generate an SSH Key
+Open your terminal and run the following command to generate a new SSH key pair:
+
+```sh
+ssh-keygen -t ed25519 -C "your_email@example.com"
+```
+
+If your system does not support Ed25519, you can use RSA instead:
+
+```sh
+ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+```
+
+You'll be prompted to specify a file to save the key. Press Enter to accept the default location (`~/.ssh/id_ed25519` or `~/.ssh/id_rsa`), and then enter a passphrase for added security (optional but recommended).
+
+#### 2. Add Your SSH Key to the SSH-Agent
+Start the SSH agent in the background:
+
+```sh
+eval "$(ssh-agent -s)"
+```
+
+Add your SSH private key to the SSH agent:
+
+```sh
+ssh-add ~/.ssh/id_ed25519
+```
+
+Or for RSA:
+
+```sh
+ssh-add ~/.ssh/id_rsa
+```
+
+#### 3. Add Your SSH Key to GitHub
+Copy the SSH key to your clipboard:
+
+```sh
+cat ~/.ssh/id_ed25519.pub
+```
+
+Or for RSA:
+
+```sh
+cat ~/.ssh/id_rsa.pub
+```
+
+- Go to GitHub.
+- Click on your profile picture in the top right corner and go to **Settings**.
+- In the left sidebar, click **SSH and GPG keys**.
+- Click **New SSH key**.
+- Paste your key into the "Key" field and give it a title.
+- Click **Add SSH key**.
+
+#### 4. Test Your SSH Connection
+To test your SSH connection, run:
+
+```sh
+ssh -T git@github.com
+```
+
+You should see a message like:
+
+```plaintext
+Hi yourusername! You've successfully authenticated, but GitHub does not provide shell access.
+```
+
+#### 5. Clone the Repository Using SSH
+Now you can clone your private repository using SSH:
+
+```sh
+git clone git@github.com:BowBoyCode/CoDe-Repo.git
+```
+
+### Explanation of Commands
+
+- `ssh-keygen -t ed25519 -C "your_email@example.com"`: Generates a new SSH key pair using the Ed25519 algorithm
+The `cat` command by itself does not copy the key to the clipboard; it simply displays the contents of the file. You need to manually copy the output from the terminal and then paste it into GitHub.
+
+Here's a step-by-step explanation:
+
+### Displaying and Copying the SSH Key
+
+1. **Display the SSH Key:**
+   - To display your SSH public key, use the `cat` command:
+     ```sh
+     cat ~/.ssh/id_ed25519.pub
+     ```
+     or for RSA:
+     ```sh
+     cat ~/.ssh/id_rsa.pub
+     ```
+
+2. **Copy the SSH Key:**
+   - After running the `cat` command, the key will be displayed in your terminal. It should look something like this:
+     ```
+     ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB1m3bL9qZgP6+NlWd/ydjzZZF3y6pLphEwoYd3n+BYD your_email@example.com
+     ```
+   - Select the entire key (including the `ssh-ed25519` or `ssh-rsa` prefix) and copy it to your clipboard.
+
+### Adding the SSH Key to GitHub
+
+1. **Go to GitHub:**
+   - Log in to your GitHub account.
+   - Click on your profile picture in the top right corner and go to **Settings**.
+
+2. **Navigate to SSH and GPG Keys:**
+   - In the left sidebar, click **SSH and GPG keys**.
+
+3. **Add a New SSH Key:**
+   - Click **New SSH key**.
+   - Paste the copied SSH key into the "Key" field.
+   - Give the key a meaningful title (e.g., "Kali Terminal").
+   - Click **Add SSH key**.
+
+### Test the SSH Connection
+
+To ensure everything is set up correctly, test the SSH connection:
+
+```sh
+ssh -T git@github.com
+```
+
+You should see a message like this:
+
+```
+Hi yourusername! You've successfully authenticated, but GitHub does not provide shell access.
+```
+
+### Cloning the Repository Using SSH
+
+Now you can clone your private repository using SSH:
+
+```sh
+git clone git@github.com:BowBoyCode/CoDe-Repo.git
+```
+
+### Summary of Commands
+
+1. **Generate SSH Key:**
+   ```sh
+   ssh-keygen -t ed25519 -C "your_email@example.com"
+   ```
+
+2. **Start SSH Agent and Add Key:**
+   ```sh
+   eval "$(ssh-agent -s)"
+   ssh-add ~/.ssh/id_ed25519
+   ```
+
+3. **Display and Copy SSH Key:**
+   ```sh
+   cat ~/.ssh/id_ed25519.pub
+   ```
+
+4. **Add Key to GitHub:**
+   - Paste the copied key into **Settings > SSH and GPG keys > New SSH key** on GitHub.
+
+5. **Test SSH Connection:**
+   ```sh
+   ssh -T git@github.com
+   ```
+
+6. **Clone Repository:**
+   ```sh
+   git clone git@github.com:BowBoyCode/CoDe-Repo.git
+   ```
+
+This should resolve any issues related to accessing your private repository.
+
+
+
+
+
